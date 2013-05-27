@@ -7,6 +7,29 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="ConcurrencyUtil" exported="" />
+    <orderEntry type="module" module-name="FPJ" exported="" />
+    <orderEntry type="module" module-name="JavaFXBehaviors" exported="" />
+    <orderEntry type="module" module-name="JavaFXUtil" exported="" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../level1/ConcurrencyUtil/lib/sodium.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/pcollections-2.1.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="Util" />
   </component>
 </module>
 
