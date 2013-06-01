@@ -29,7 +29,8 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="Util" />
+    <orderEntry type="module" module-name="Util" exported="" />
+    <orderEntry type="module" module-name="GraphModel" exported="" />
   </component>
 </module>
 

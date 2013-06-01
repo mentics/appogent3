@@ -1,14 +1,15 @@
-package com.mentics.designer;
+package com.mentics.designer.plugins;
 
 import com.mentics.designer.AddNodeAction.AddedNode;
+import com.mentics.designer.DataModel;
 import com.mentics.designer.spi.EdgePainter;
 import com.mentics.designer.spi.Layout;
 import com.mentics.designer.spi.NodePainter;
 import com.mentics.model.Modification;
+import com.mentics.model.graph.Node;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import sodium.BehaviorSink;
 import sodium.Event;
 import sodium.Handler;
@@ -32,10 +33,10 @@ public class BasicLayout implements Layout {
                     @Override
                     public void run() {
                         if (mod instanceof AddedNode) {
-                            Item added = ((AddedNode) mod).getValueAdded();
+                            Node added = ((AddedNode) mod).getValueAdded();
                             if (added != null) {
                                 // TODO: translate from mouse coords to world coords
-                                Node newNode = nodePainter.createNode(added);
+                                javafx.scene.Node newNode = nodePainter.createNode(added);
                                 Point2D mouse = mousePos.sample();
                                 newNode.setTranslateX(mouse.getX());
                                 newNode.setTranslateY(mouse.getY());

@@ -1,12 +1,13 @@
-package com.mentics.designer;
+package com.mentics.designer.plugins;
 
+import com.mentics.designer.SelectedLabels;
 import com.mentics.designer.spi.NodePainter;
 import com.mentics.javafx.DraggableItemNature;
+import com.mentics.model.graph.Node;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -20,8 +21,8 @@ public class BasicNodePainter implements NodePainter {
     private SelectedLabels labels = new SelectedLabels();
 
     @Override
-    public Node createNode(Item item) {
-        final Label text = new Label(item.toString());
+    public javafx.scene.Node createNode(Node node) {
+        final Label text = new Label(node.toString());
         final Path path = new Path();
         text.getStyleClass().add("node");
         text.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<Event>() {
@@ -70,6 +71,6 @@ public class BasicNodePainter implements NodePainter {
         DraggableItemNature.addTo(text, text, MouseButton.PRIMARY);
         return text;
     }
-   
-    
+
+
 }

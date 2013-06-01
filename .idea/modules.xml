@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Appogent/Appogent.iml" filepath="$PROJECT_DIR$/Appogent/Appogent.iml" />
       <module fileurl="file://$PROJECT_DIR$/../level1/ConcurrencyUtil/ConcurrencyUtil.iml" filepath="$PROJECT_DIR$/../level1/ConcurrencyUtil/ConcurrencyUtil.iml" />
       <module fileurl="file://$PROJECT_DIR$/../level0/FPJ/FPJ.iml" filepath="$PROJECT_DIR$/../level0/FPJ/FPJ.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../level1/GraphModel/GraphModel.iml" filepath="$PROJECT_DIR$/../level1/GraphModel/GraphModel.iml" />
       <module fileurl="file://$PROJECT_DIR$/../level1/JavaFXBehaviors/JavaFXBehaviors.iml" filepath="$PROJECT_DIR$/../level1/JavaFXBehaviors/JavaFXBehaviors.iml" />
       <module fileurl="file://$PROJECT_DIR$/../level0/JavaFXUtil/JavaFXUtil.iml" filepath="$PROJECT_DIR$/../level0/JavaFXUtil/JavaFXUtil.iml" />
       <module fileurl="file://$PROJECT_DIR$/../level0/Util/Util.iml" filepath="$PROJECT_DIR$/../level0/Util/Util.iml" />

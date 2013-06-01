@@ -1,5 +1,6 @@
 package com.mentics.designer;
 
+import com.mentics.model.graph.Node;
 import org.pcollections.IntTreePMap;
 import sodium.Lambda1;
 
@@ -11,22 +12,22 @@ public class DataModel {
         }
     };
 
-    
+
     // Instance Fields //
-    
+
     public final String projectName;
 
-    public final IntTreePMap<Item> items;
+    public final IntTreePMap<Node> items;
 
-    
+
     // Constructors //
-    
-    public DataModel(String projectName, IntTreePMap<Item> items) {
+
+    public DataModel(String projectName, IntTreePMap<Node> items) {
         this.projectName = projectName;
         this.items = items;
     }
 
-    public DataModel withNewNode(Item item) {
-        return new DataModel(projectName, items.plus(item.id, item));
+    public DataModel withNewNode(Node node) {
+        return new DataModel(projectName, items.plus(node.id, node));
     }
 }

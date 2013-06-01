@@ -2,16 +2,17 @@ package com.mentics.designer;
 
 import com.mentics.model.Modification;
 import com.mentics.model.Modify;
+import com.mentics.model.graph.Node;
 
 public class AddNodeAction implements Modify<DataModel> {
 
     public static class AddedNode implements Modification<DataModel> {
         private DataModel model;
-        private Item newItem;
+        private Node newNode;
 
-        public AddedNode(DataModel model, Item newItem) {
+        public AddedNode(DataModel model, Node newNode) {
             this.model = model;
-            this.newItem = newItem;
+            this.newNode = newNode;
         }
 
         @Override
@@ -19,20 +20,20 @@ public class AddNodeAction implements Modify<DataModel> {
             return model;
         }
 
-        public Item getValueAdded() {
-            return newItem;
+        public Node getValueAdded() {
+            return newNode;
         }
     }
     
-    private Item item;
+    private Node node;
 
 
-    public AddNodeAction(Item item) {
-        this.item = item;
+    public AddNodeAction(Node node) {
+        this.node = node;
     }
 
     @Override
     public Modification<DataModel> apply(DataModel oldValue) {
-        return new AddedNode(oldValue.withNewNode(item), item);
+        return new AddedNode(oldValue.withNewNode(node), node);
     }
 }
