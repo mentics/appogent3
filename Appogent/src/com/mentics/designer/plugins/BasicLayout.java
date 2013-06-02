@@ -26,28 +26,23 @@ public class BasicLayout implements Layout {
         this.mousePos = mousePos;
         this.nodePainter = nodePainter;
         this.edgePainter = edgePainter;
-        listen = updates.listen(new Handler<Modification<DataModel>>() {
-            @Override
-            public void run(final Modification<DataModel> mod) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mod instanceof AddedNode) {
-                            Node added = ((AddedNode) mod).getValueAdded();
-                            if (added != null) {
-                                // TODO: translate from mouse coords to world coords
-                                javafx.scene.Node newNode = nodePainter.createNode(added);
-                                Point2D mouse = mousePos.sample();
-                                newNode.setTranslateX(mouse.getX());
-                                newNode.setTranslateY(mouse.getY());
-                                //Random r = new Random();
-                                //newNode.setTranslateZ(r.nextDouble() * 100);
-                                group.getChildren().add(newNode);
-                            }
-                        }
+
+        listen = updates.listen(mod -> {
+            Platform.runLater(() -> {
+                if (mod instanceof AddedNode) {
+                    Node added = ((AddedNode) mod).getValueAdded();
+                    if (added != null) {
+                        // TODO: translate from mouse coords to world coords
+                        javafx.scene.Node newNode = nodePainter.createNode(added);
+                        Point2D mouse = mousePos.sample();
+                        newNode.setTranslateX(mouse.getX());
+                        newNode.setTranslateY(mouse.getY());
+                        //Random r = new Random();
+                        //newNode.setTranslateZ(r.nextDouble() * 100);
+                        group.getChildren().add(newNode);
                     }
-                });
-            }
+                }
+            });
         });
     }
 }

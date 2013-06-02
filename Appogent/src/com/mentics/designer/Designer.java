@@ -4,10 +4,10 @@ import com.mentics.designer.plugins.BasicEdgePainter;
 import com.mentics.designer.plugins.BasicLayout;
 import com.mentics.designer.plugins.BasicNodePainter;
 import com.mentics.designer.spi.Layout;
-import com.mentics.javafx.DraggablePathNature;
 import com.mentics.javafx.KeyEventProperty;
 import com.mentics.javafx.Natures;
 import com.mentics.javafx.ZoomableNature;
+import com.mentics.kryo.KryoUtil;
 import com.mentics.model.ModelManager;
 import com.mentics.model.graph.Node;
 import javafx.application.Application;
@@ -18,25 +18,23 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.agilewiki.jactor.concurrent.JAThreadFactory;
 import org.agilewiki.jactor.concurrent.JAThreadManager;
 import org.pcollections.IntTreePMap;
 import sodium.BehaviorSink;
 
-import java.io.File;
-import java.util.Iterator;
+import java.io.*;
+import java.util.Properties;
 
-//import static com.mentics.designer.plugins.BasicNodePainter.selectedLabels;
 
 public class Designer extends Application {
+    public static final String USER_HOME = System.getProperty("user.home");
+    private static final File CONFIG_FILE = new File(USER_HOME, ".appogent");
 
     public static int counter = 0;
     BehaviorSink<Point2D> mousePos = new BehaviorSink<>(new Point2D(0, 0));
@@ -70,13 +68,64 @@ public class Designer extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        mgr = new ModelManager<>(new DataModel("<New Project>", IntTreePMap.<Node>empty()), threads);
+        Properties config = loadConfig(CONFIG_FILE);
+        String projectPath = nonNull(config.getProperty("current.project.path"), new File(USER_HOME, "default-project.appogent").getAbsolutePath());
 
+        File projectFile = new File(projectPath);
+        DataModel model;
+        if (projectFile.exists()) {
+            try {
+                model = loadProject(projectFile);
+            } catch (Exception e) {
+                // TODO: this is wrong behavior
+                System.out.println("Could not load project file. Creating new blank project.");
+                e.printStackTrace();
+                model = new DataModel("<New Project>", projectPath, IntTreePMap.<Node>empty());
+            }
+        } else {
+            model = new DataModel("<New Project>", projectPath, IntTreePMap.<Node>empty());
+        }
+        mgr = new ModelManager<>(model, threads);
         stage.setScene(createScene());
         stage.setTitle("Designer");
         stage.setWidth(800);
         stage.setHeight(600);
         stage.show();
+
+        stage.setOnCloseRequest(windowEvent -> {
+            DataModel m = mgr.value.sample();
+            System.out.println("Saving project to: " + m.projectPath);
+            saveProject(projectFile, m);
+
+            try (Writer w = new FileWriter(CONFIG_FILE)) {
+                config.setProperty("current.project.path", m.projectPath);
+                config.store(w, null);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        });
+    }
+
+    private Properties loadConfig(File configFile) throws IOException {
+        Properties config = new Properties();
+        if (configFile.exists()) {
+            try (Reader r = new FileReader(CONFIG_FILE)) {
+                config.load(r);
+            }
+        }
+        return config;
+    }
+
+    private void saveProject(File projectFile, DataModel model) {
+        KryoUtil.save(model, projectFile);
+    }
+
+    private DataModel loadProject(File projectFile) {
+        return KryoUtil.load(DataModel.class, projectFile);
+    }
+
+    public static <A> A nonNull(A v1, A v2) {
+        return v1 != null ? v1 : v2;
     }
 
     private Scene createScene() {
@@ -91,9 +140,7 @@ public class Designer extends Application {
         SodiumFX.bind(projectName.textProperty(), mgr.value.map(DataModel.TO_PROJECT_NAME));
 
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("./test.css");
-        System.out.println(new File("test.css").getAbsolutePath());
-        System.out.println(new File("test.css").exists());
+        scene.getStylesheets().add("test.css");
         scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
